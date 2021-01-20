@@ -4,6 +4,7 @@ import type { PropType, CSSProperties } from 'vue';
 
 import { computed, defineComponent, unref, toRef } from 'vue';
 import { BasicMenu } from '/@/components/Menu';
+import { SimpleMenu } from '/@/components/SimpleMenu';
 import { AppLogo } from '/@/components/Application';
 
 import { MenuModeEnum, MenuSplitTyeEnum } from '/@/enums/menuEnum';
@@ -43,10 +44,11 @@ export default defineComponent({
     const {
       getMenuMode,
       getMenuType,
-      getCollapsedShowTitle,
       getMenuTheme,
       getCollapsed,
+      getCollapsedShowTitle,
       getAccordion,
+      getIsHorizontal,
       getIsSidebarType,
     } = useMenuSetting();
     const { getShowLogo } = useRootSetting();
@@ -66,7 +68,12 @@ export default defineComponent({
     const getIsShowLogo = computed(() => unref(getShowLogo) && unref(getIsSidebarType));
 
     const getUseScroll = computed(() => {
-      return unref(getIsSidebarType) || props.splitType === MenuSplitTyeEnum.LEFT;
+      return (
+        !unref(getIsHorizontal) &&
+        (unref(getIsSidebarType) ||
+          props.splitType === MenuSplitTyeEnum.LEFT ||
+          props.splitType === MenuSplitTyeEnum.NONE)
+      );
     });
 
     const getWrapperStyle = computed(
@@ -120,18 +127,29 @@ export default defineComponent({
     }
 
     function renderMenu() {
-      return (
+      const menus = unref(menusRef);
+      if (!menus || !menus.length) return null;
+      return !props.isHorizontal ? (
+        <SimpleMenu
+          items={menus}
+          theme={unref(getComputedMenuTheme)}
+          accordion={unref(getAccordion)}
+          collapse={unref(getCollapsed)}
+          collapsedShowTitle={unref(getCollapsedShowTitle)}
+          onMenuClick={handleMenuClick}
+        />
+      ) : (
         <BasicMenu
           beforeClickFn={beforeMenuClickFn}
           isHorizontal={props.isHorizontal}
           type={unref(getMenuType)}
-          mode={unref(getComputedMenuMode)}
           collapsedShowTitle={unref(getCollapsedShowTitle)}
+          showLogo={unref(getIsShowLogo)}
+          mode={unref(getComputedMenuMode)}
           theme={unref(getComputedMenuTheme)}
-          items={unref(menusRef)}
+          items={menus}
           accordion={unref(getAccordion)}
           onMenuClick={handleMenuClick}
-          showLogo={unref(getIsShowLogo)}
         />
       );
     }

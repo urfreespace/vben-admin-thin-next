@@ -8,9 +8,9 @@
     :class="[prefixCls, theme, { 'collapsed-show-title': getCollapsedShowTitle }]"
     @click="handleGoHome"
   >
-    <img src="/@/assets/images/logo.png" />
+    <img src="../../../assets/images/logo.png" />
     <div class="ml-2 ellipsis" :class="[`${prefixCls}__title`]" v-show="showTitle">
-      {{ globSetting.title }}
+      {{ title }}
     </div>
   </div>
 </template>
@@ -39,10 +39,9 @@
     },
     setup() {
       const { prefixCls } = useDesign('app-logo');
-
       const { getCollapsedShowTitle } = useMenuSetting();
 
-      const globSetting = useGlobSetting();
+      const { title } = useGlobSetting();
 
       const go = useGo();
 
@@ -52,15 +51,14 @@
 
       return {
         handleGoHome,
-        globSetting,
-        getCollapsedShowTitle,
+        title,
         prefixCls,
+        getCollapsedShowTitle,
       };
     },
   });
 </script>
 <style lang="less" scoped>
-  @import (reference) '../../../design/index.less';
   @prefix-cls: ~'@{namespace}-app-logo';
 
   .@{prefix-cls} {
@@ -70,12 +68,12 @@
     cursor: pointer;
     transition: all 0.2s ease;
 
-    &.collapsed-show-title {
-      padding-left: 20px;
-    }
-
     &.light {
       border-bottom: 1px solid @border-color-base;
+    }
+
+    &.collapsed-show-title {
+      padding-left: 20px;
     }
 
     &.light &__title {

@@ -10,7 +10,7 @@ import {
   InputNumberItem,
 } from './components';
 
-import { MenuTypeEnum } from '/@/enums/menuEnum';
+import { MenuTypeEnum, TriggerEnum } from '/@/enums/menuEnum';
 
 import { useRootSetting } from '/@/hooks/setting/useRootSetting';
 import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
@@ -25,12 +25,13 @@ import {
   HandlerEnum,
   contentModeOptions,
   topMenuAlignOptions,
-  menuTriggerOptions,
+  getMenuTriggerOptions,
   routerTransitionOptions,
   menuTypeList,
+  mixSidebarTriggerOptions,
 } from './enum';
 
-import { HEADER_PRESET_BG_COLOR_LIST, SIDE_BAR_BG_COLOR_LIST } from '/@/settings/colorSetting';
+import { HEADER_PRESET_BG_COLOR_LIST, SIDE_BAR_BG_COLOR_LIST } from '/@/settings/designSetting';
 
 const { t } = useI18n();
 
@@ -71,6 +72,10 @@ export default defineComponent({
       getMenuBgColor,
       getIsTopMenu,
       getSplit,
+      getIsMixSidebar,
+      getCloseMixSidebarOnChange,
+      getMixSideTrigger,
+      getMixSideFixed,
     } = useMenuSetting();
 
     const {
@@ -80,7 +85,7 @@ export default defineComponent({
       getShowSearch,
     } = useHeaderSetting();
 
-    const { getShowMultipleTab, getShowQuick, getShowRedo } = useMultipleTabSetting();
+    const { getShowMultipleTab, getShowQuick, getShowRedo, getShowFold } = useMultipleTabSetting();
 
     const getShowMenuRef = computed(() => {
       return unref(getShowMenu) && !unref(getIsHorizontal);
@@ -99,12 +104,6 @@ export default defineComponent({
               });
             }}
             def={unref(getMenuType)}
-          />
-          <SwitchItem
-            title={t('layout.setting.splitMenu')}
-            event={HandlerEnum.MENU_SPLIT}
-            def={unref(getSplit)}
-            disabled={!unref(getShowMenuRef) || unref(getMenuType) !== MenuTypeEnum.MIX}
           />
         </>
       );
@@ -134,8 +133,42 @@ export default defineComponent({
      * @description:
      */
     function renderFeatures() {
+      let triggerDef = unref(getTrigger);
+
+      const triggerOptions = getMenuTriggerOptions(unref(getSplit));
+      const some = triggerOptions.some((item) => item.value === triggerDef);
+      if (!some) {
+        triggerDef = TriggerEnum.FOOTER;
+      }
+
       return (
         <>
+          <SwitchItem
+            title={t('layout.setting.splitMenu')}
+            event={HandlerEnum.MENU_SPLIT}
+            def={unref(getSplit)}
+            disabled={!unref(getShowMenuRef) || unref(getMenuType) !== MenuTypeEnum.MIX}
+          />
+          <SwitchItem
+            title={t('layout.setting.mixSidebarFixed')}
+            event={HandlerEnum.MENU_FIXED_MIX_SIDEBAR}
+            def={unref(getMixSideFixed)}
+            disabled={!unref(getIsMixSidebar)}
+          />
+
+          <SwitchItem
+            title={t('layout.setting.closeMixSidebarOnChange')}
+            event={HandlerEnum.MENU_CLOSE_MIX_SIDEBAR_ON_CHANGE}
+            def={unref(getCloseMixSidebarOnChange)}
+            disabled={!unref(getIsMixSidebar)}
+          />
+          <SwitchItem
+            title={t('layout.setting.menuCollapse')}
+            event={HandlerEnum.MENU_COLLAPSED}
+            def={unref(getCollapsed)}
+            disabled={!unref(getShowMenuRef)}
+          />
+
           <SwitchItem
             title={t('layout.setting.menuDrag')}
             event={HandlerEnum.MENU_HAS_DRAG}
@@ -154,18 +187,14 @@ export default defineComponent({
             def={unref(getAccordion)}
             disabled={!unref(getShowMenuRef)}
           />
-          <SwitchItem
-            title={t('layout.setting.menuCollapse')}
-            event={HandlerEnum.MENU_COLLAPSED}
-            def={unref(getCollapsed)}
-            disabled={!unref(getShowMenuRef)}
-          />
+
           <SwitchItem
             title={t('layout.setting.collapseMenuDisplayName')}
             event={HandlerEnum.MENU_COLLAPSED_SHOW_TITLE}
             def={unref(getCollapsedShowTitle)}
-            disabled={!unref(getShowMenuRef) || !unref(getCollapsed)}
+            disabled={!unref(getShowMenuRef) || !unref(getCollapsed) || unref(getIsMixSidebar)}
           />
+
           <SwitchItem
             title={t('layout.setting.fixedHeader')}
             event={HandlerEnum.HEADER_FIXED}
@@ -176,21 +205,33 @@ export default defineComponent({
             title={t('layout.setting.fixedSideBar')}
             event={HandlerEnum.MENU_FIXED}
             def={unref(getMenuFixed)}
-            disabled={!unref(getShowMenuRef)}
+            disabled={!unref(getShowMenuRef) || unref(getIsMixSidebar)}
+          />
+          <SelectItem
+            title={t('layout.setting.mixSidebarTrigger')}
+            event={HandlerEnum.MENU_TRIGGER_MIX_SIDEBAR}
+            def={unref(getMixSideTrigger)}
+            options={mixSidebarTriggerOptions}
+            disabled={!unref(getIsMixSidebar)}
           />
           <SelectItem
             title={t('layout.setting.topMenuLayout')}
             event={HandlerEnum.MENU_TOP_ALIGN}
             def={unref(getTopMenuAlign)}
             options={topMenuAlignOptions}
-            disabled={!unref(getShowHeader) || (!unref(getIsTopMenu) && !unref(getSplit))}
+            disabled={
+              !unref(getShowHeader) ||
+              unref(getSplit) ||
+              (!unref(getIsTopMenu) && !unref(getSplit)) ||
+              unref(getIsMixSidebar)
+            }
           />
           <SelectItem
             title={t('layout.setting.menuCollapseButton')}
             event={HandlerEnum.MENU_TRIGGER}
-            def={unref(getTrigger)}
-            options={menuTriggerOptions}
-            disabled={!unref(getShowMenuRef)}
+            def={triggerDef}
+            options={triggerOptions}
+            disabled={!unref(getShowMenuRef) || unref(getIsMixSidebar)}
           />
           <SelectItem
             title={t('layout.setting.contentMode')}
@@ -259,6 +300,12 @@ export default defineComponent({
             def={unref(getShowQuick)}
             disabled={!unref(getShowMultipleTab)}
           />
+          <SwitchItem
+            title={t('layout.setting.tabsFoldBtn')}
+            event={HandlerEnum.TABS_SHOW_FOLD}
+            def={unref(getShowFold)}
+            disabled={!unref(getShowMultipleTab)}
+          />
 
           <SwitchItem
             title={t('layout.setting.sidebar')}
@@ -272,7 +319,12 @@ export default defineComponent({
             event={HandlerEnum.HEADER_SHOW}
             def={unref(getShowHeader)}
           />
-          <SwitchItem title="Logo" event={HandlerEnum.SHOW_LOGO} def={unref(getShowLogo)} />
+          <SwitchItem
+            title="Logo"
+            event={HandlerEnum.SHOW_LOGO}
+            def={unref(getShowLogo)}
+            disabled={unref(getIsMixSidebar)}
+          />
           <SwitchItem
             title={t('layout.setting.footer')}
             event={HandlerEnum.SHOW_FOOTER}
@@ -337,26 +389,20 @@ export default defineComponent({
         width={330}
         wrapClassName="setting-drawer"
       >
-        {{
-          default: () => (
-            <>
-              <Divider>{() => t('layout.setting.navMode')}</Divider>
-              {renderSidebar()}
-              <Divider>{() => t('layout.setting.headerTheme')}</Divider>
-              {renderHeaderTheme()}
-              <Divider>{() => t('layout.setting.sidebarTheme')}</Divider>
-              {renderSiderTheme()}
-              <Divider>{() => t('layout.setting.interfaceFunction')}</Divider>
-              {renderFeatures()}
-              <Divider>{() => t('layout.setting.interfaceDisplay')}</Divider>
-              {renderContent()}
-              <Divider>{() => t('layout.setting.animation')}</Divider>
-              {renderTransition()}
-              <Divider />
-              <SettingFooter />
-            </>
-          ),
-        }}
+        <Divider>{() => t('layout.setting.navMode')}</Divider>
+        {renderSidebar()}
+        <Divider>{() => t('layout.setting.headerTheme')}</Divider>
+        {renderHeaderTheme()}
+        <Divider>{() => t('layout.setting.sidebarTheme')}</Divider>
+        {renderSiderTheme()}
+        <Divider>{() => t('layout.setting.interfaceFunction')}</Divider>
+        {renderFeatures()}
+        <Divider>{() => t('layout.setting.interfaceDisplay')}</Divider>
+        {renderContent()}
+        <Divider>{() => t('layout.setting.animation')}</Divider>
+        {renderTransition()}
+        <Divider />
+        <SettingFooter />
       </BasicDrawer>
     );
   },

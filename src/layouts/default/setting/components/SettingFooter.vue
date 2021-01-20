@@ -7,7 +7,7 @@
 
     <a-button color="warning" block @click="handleResetSetting" class="my-3">
       <RedoOutlined class="mr-2" />
-      {{ t('layout.setting.resetBtn') }}
+      {{ t('common.resetText') }}
     </a-button>
 
     <a-button color="error" block @click="handleClearAndRedo">
@@ -27,7 +27,7 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useCopyToClipboard } from '/@/hooks/web/useCopyToClipboard';
   import { useRootSetting } from '/@/hooks/setting/useRootSetting';
-  import { updateColorWeak, updateGrayMode } from '/@/setup/theme';
+  import { updateColorWeak, updateGrayMode } from '/@/logics/theme';
 
   export default defineComponent({
     name: 'SettingFooter',
@@ -75,7 +75,6 @@
   });
 </script>
 <style lang="less" scoped>
-  @import (reference) '../../../../design/index.less';
   @prefix-cls: ~'@{namespace}-setting-footer';
 
   .@{prefix-cls} {

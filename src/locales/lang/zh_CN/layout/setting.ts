@@ -12,7 +12,8 @@ export default {
   menuTriggerTop: '顶部',
   // menu type
   menuTypeSidebar: '左侧菜单模式',
-  menuTypeMix: '混合模式',
+  menuTypeMixSidebar: '左侧菜单混合模式',
+  menuTypeMix: '顶部菜单混合模式',
   menuTypeTopMenu: '顶部菜单模式',
 
   on: '开',
@@ -24,7 +25,6 @@ export default {
   resetSuccess: '重置成功！',
 
   copyBtn: '拷贝',
-  resetBtn: '重置',
   clearBtn: '清空缓存并返回登录页',
 
   drawerTitle: '项目配置',
@@ -34,6 +34,7 @@ export default {
   interfaceDisplay: '界面显示',
   animation: '动画',
   splitMenu: '分割菜单',
+  closeMixSidebarOnChange: '切换页面关闭菜单',
 
   headerTheme: '顶栏主题',
   sidebarTheme: '菜单主题',
@@ -53,6 +54,7 @@ export default {
   tabs: '标签页',
   tabsQuickBtn: '标签页快捷按钮',
   tabsRedoBtn: '标签页刷新按钮',
+  tabsFoldBtn: '标签页折叠按钮',
   sidebar: '左侧菜单',
   header: '顶栏',
   footer: '页脚',
@@ -70,4 +72,10 @@ export default {
 
   fixedHeader: '固定header',
   fixedSideBar: '固定Sidebar',
+
+  mixSidebarTrigger: '混合菜单触发方式',
+  triggerHover: '悬停',
+  triggerClick: '点击',
+
+  mixSidebarFixed: '固定展开菜单',
 };
