@@ -6,7 +6,7 @@ import legacy from '@vitejs/plugin-legacy';
 
 import { loadEnv } from 'vite';
 
-import { modifyVars } from './build/config/lessModifyVars';
+import { generateModifyVars } from './build/config/themeConfig';
 import { createProxy } from './build/vite/proxy';
 
 import { wrapperEnv } from './build/utils';
@@ -44,7 +44,9 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         overlay: true,
       },
     },
+
     build: {
+      // sourcemap: true,
       polyfillDynamicImport: VITE_LEGACY,
       terserOptions: {
         compress: {
@@ -52,6 +54,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           drop_console: VITE_DROP_CONSOLE,
         },
       },
+      brotliSize: false,
+      chunkSizeWarningLimit: 1200,
     },
     define: {
       __VERSION__: pkg.version,
@@ -67,7 +71,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           modifyVars: {
             // reference:  Avoid repeated references
             hack: `true; @import (reference) "${resolve('src/design/config.less')}";`,
-            ...modifyVars,
+            ...generateModifyVars(),
           },
           javascriptEnabled: true,
         },
