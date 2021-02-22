@@ -1,6 +1,6 @@
 import { generate } from '@ant-design/colors';
 
-export const primaryColor = '#0084f4';
+export const primaryColor = '#0960bd';
 
 export const themeMode = 'light';
 
@@ -94,7 +94,7 @@ export function generateModifyVars() {
     'disabled-color': 'rgba(0, 0, 0, 0.25)', //  Failure color
     'heading-color': 'rgba(0, 0, 0, 0.85)', //  Title color
     'text-color': 'rgba(0, 0, 0, 0.85)', //  Main text color
-    'text-color-secondary ': 'rgba(0, 0, 0, 0.45)', // Subtext color
+    'text-color-secondary': 'rgba(0, 0, 0, 0.45)', // Subtext color
     'font-size-base': '14px', //  Main font size
     'box-shadow-base': '0 2px 8px rgba(0, 0, 0, 0.15)', //  Floating shadow
     'border-color-base': '#d9d9d9', //  Border color,

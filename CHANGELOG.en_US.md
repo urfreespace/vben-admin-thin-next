@@ -1,3 +1,63 @@
+## 2.0.1 (2021-02-21)
+
+### ✨ Refactor
+
+- Refactored login page, new registration page/reset password page/mobile phone login/QR code login
+
+### ✨ Features
+
+- Added the `settingButtonPosition` configuration item for configuring the position of the `settings` button
+- `modal` can switch the full screen by double-clicking the head
+- Added `CountDownInput` component
+
+### ⚡ Performance Improvements
+
+- Optimize the editable center style and the width of the drop-down box is too short
+- The `edit-change` event listener when the table is added and edited
+
+### 🐛 Bug Fixes
+
+- Fix image preview style error
+- Fix icon style problem
+- Fix the drop-down echo problem of editable table
+
+## 2.0.0 (2021-02-18)
+
+## Breaking changes
+
+- `echarts` is upgraded to 5.0 and introduced on demand (just use `useECharts`).
+
+### ✨ Refactor
+
+- Removed `global.less`, `mixin.less`, `design/helper`, replaced by `windicss`, and need to modify the corresponding styles if they are useful
+
+### ✨ Features
+
+- useModal adds the return value function `redoModalHeight`, which is used to refresh the modal height when the modal is dynamic content
+- Upgrade husky to 5.0
+- Added `brotli`|`gzip` compression and related test commands
+- Re-introduction of `windicss` (same as `tailwind`). Faster in speed
+
+### ⚡ Performance Improvements
+
+- Adjust the return value of the interface to obtain user information in array format
+- Fix the error-log list as the system route
+
+### 🐛 Bug Fixes
+
+- Fix the issue of upload component maxNumber invalid
+- Fix package sourcemap error report
+- Fix code debugger location display error
+- Fix the issue of mock plugin post request error
+- Fix some themes color value error
+- Fix the table in editable row status and press Enter to confirm
+
+### 🎫 Chores
+
+- Documentation update
+- Upgrade ant-design-vue to `2.0.0`
+- Upgrade vite to `2.0.0`
+
 ## 2.0.0-rc.18 (2021-02-05)
 
 ### ✨ Features

@@ -1,8 +1,47 @@
-## Wip
+## 2.0.1 (2021-02-21)
+
+### ✨ Refactor
+
+- 登录页重构,新增注册页面/重置密码页面/手机登录/二维码登录
+
+### ✨ Features
+
+- 新增 `settingButtonPosition`配置项,用于配置`设置`按钮位置
+- `modal`可以通过双击头部切换全屏
+- 新增`CountDownInput`组件
+
+### ⚡ Performance Improvements
+
+- 优化可编辑居中样式及下拉框宽度过短
+- 表格新增编辑时`edit-change`事件监听
+
+### 🐛 Bug Fixes
+
+- 修复图片预览样式错误
+- 修复图标样式问题
+- 修复可编辑表格下拉回显问题
+
+## 2.0.0 (2021-02-18)
+
+## (破坏性更新) Breaking changes
+
+- `echarts` 升级到 5.0,并且进行按需引入(只需使用 `useECharts` 即可).
+
+### ✨ Refactor
+
+- 移除`global.less`,`mixin.less`,`design/helper`,由`windicss`代替,有用到的需要修改对应的样式
 
 ### ✨ Features
 
 - useModal 新增返回值函数 `redoModalHeight`,用于在 modal 内为动态内容时刷新 modal 高度
+- 升级 husky 到 5.0
+- 新增 `brotli`|`gzip`压缩及相关测试命令
+- 重新引入 `windicss` (与`tailwind`一样).在速度上更快
+
+### ⚡ Performance Improvements
+
+- 调整获取用户信息接口返回值为数组格式
+- 将 error-log 列表固定为系统路由
 
 ### 🐛 Bug Fixes
 
@@ -11,11 +50,13 @@
 - 修复代码 debugger 位置显示错误
 - 修复 mock 插件 post 请求错误问题
 - 修复部分主题颜色值错误
+- 修复表格在可编辑行状态回车确认
 
 ### 🎫 Chores
 
 - 文档更新
-- 升级 ant-design-vue 到 2.0.0
+- 升级 ant-design-vue 到 `2.0.0`
+- 升级 vite 到 `2.0.0`
 
 ## 2.0.0-rc.18 (2021-02-05)
 
